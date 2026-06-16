@@ -1,0 +1,535 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --gold: #e8b84a;
+  --gold-dark: #c99a2e;
+  --gold-glow: rgba(232, 184, 74, 0.35);
+  --white: #f5f5f5;
+  --dark: #0a0a0a;
+  --overlay: rgba(0, 0, 0, 0.72);
+  --card-bg: rgba(12, 12, 12, 0.85);
+  --border: rgba(232, 184, 74, 0.25);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+  --transition: 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--white);
+  background: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Arka plan video */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.bg-video-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/*
+  Dikey (9:16) YouTube videosunu her cihazda TAM kaplat.
+  YouTube oynatıcı 16:9 çerçeve kullandığı için, dikey içeriğin
+  ekranı tamamen doldurması adına iframe içeriğe göre ölçeklenir.
+  --player-h: oynatıcı yüksekliği; içerik genişliği = --player-h * 9/16
+  Hem genişliği (>=100vw) hem yüksekliği (>=100vh) karşılayacak şekilde seçilir.
+*/
+.bg-video {
+  --player-h: max(100vh, 177.78vw);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: var(--player-h);
+  width: calc(var(--player-h) * 16 / 9);
+  transform: translate(-50%, -50%) scale(1.08);
+  transform-origin: center center;
+  pointer-events: none;
+  border: 0;
+  filter: blur(4px);
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    var(--overlay) 45%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+/* Ana uygulama */
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.75rem 1.25rem;
+  padding-top: max(1.75rem, env(safe-area-inset-top, 1.75rem));
+  padding-bottom: env(safe-area-inset-bottom, 1.5rem);
+  overflow-y: auto;
+}
+
+/* Marka başlığı (logo + istatistik) */
+.brand-header {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  width: clamp(110px, 30vw, 150px);
+  height: auto;
+  display: block;
+  margin: 0 auto 0.85rem;
+  opacity: 0.95;
+}
+
+.brand-stat {
+  font-size: clamp(0.82rem, 3vw, 0.95rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(245, 245, 245, 0.85);
+  max-width: 300px;
+  margin: 0 auto;
+  letter-spacing: 0.01em;
+}
+
+.brand-stat-number {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+}
+
+.brand-stat-number::after {
+  content: " kişi";
+  font-size: 0.78em;
+  font-weight: 500;
+  color: rgba(245, 245, 245, 0.85);
+}
+
+.steps-viewport {
+  width: 100%;
+  max-width: 420px;
+  height: min(62vh, 520px);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.steps-track {
+  position: relative;
+  height: 100%;
+  transition: transform var(--transition);
+}
+
+.step {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+  transition:
+    transform var(--transition),
+    opacity 0.5s ease;
+}
+
+.step-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.step-exit-up {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.step-exit-down {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.step-content {
+  width: 100%;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+/* Geri butonu */
+.back-btn {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(245, 245, 245, 0.6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  margin-bottom: 1.25rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+  color: var(--gold);
+}
+
+.back-btn:active {
+  transform: translateX(-2px);
+}
+
+.back-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Soru başlığı */
+.question {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.02em;
+}
+
+.q-line {
+  display: block;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.q-accent {
+  color: var(--gold);
+  font-size: clamp(2rem, 7vw, 2.75rem);
+  margin-top: 0.15em;
+}
+
+/* Seçenekler */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.option-btn,
+.action-btn {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
+  width: 100%;
+  background: var(--card-bg);
+  color: var(--white);
+}
+
+.option-btn:hover,
+.action-btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(232, 184, 74, 0.08);
+}
+
+.option-btn:active,
+.action-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.option-btn.selected {
+  border-color: var(--gold);
+  background: rgba(232, 184, 74, 0.15);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.action-btn {
+  margin-top: 2rem;
+  background: var(--gold);
+  color: var(--dark);
+  border-color: var(--gold);
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+}
+
+.action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* İfade metni */
+.statement {
+  font-size: clamp(1.15rem, 4.5vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--white);
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.step-label {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  margin-bottom: 1.75rem;
+}
+
+/* Tutar */
+.custom-amount {
+  margin-top: 1rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.custom-amount.hidden {
+  display: none;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.amount-input:focus {
+  border-color: var(--gold);
+}
+
+.amount-input::placeholder {
+  color: rgba(245, 245, 245, 0.4);
+}
+
+.selected-amount {
+  font-size: 0.9rem;
+  color: rgba(245, 245, 245, 0.7);
+  margin-bottom: 1.25rem;
+}
+
+/* Ödeme */
+.payment-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.payment-btn.secondary {
+  background: transparent;
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.payment-btn.secondary:hover {
+  background: rgba(232, 184, 74, 0.1);
+}
+
+.payment-icon {
+  font-size: 1.2rem;
+}
+
+/* Havale bilgileri */
+.transfer-content {
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.85rem;
+}
+
+.info-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 0.35rem;
+}
+
+.info-value {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(232, 184, 74, 0.15);
+}
+
+.description-box {
+  padding: 1rem 1.1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.description-text {
+  font-size: 0.9rem;
+  color: rgba(245, 245, 245, 0.85);
+  line-height: 1.5;
+}
+
+/* Kalp ayırıcı */
+.heart-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  opacity: 0.6;
+}
+
+.divider-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.heart {
+  color: var(--gold);
+  font-size: 0.85rem;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: 4px;
+  z-index: 100;
+  animation: toastIn 0.3s ease;
+}
+
+.toast.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Mobil uyum */
+@media (max-height: 600px) {
+  .question {
+    margin-bottom: 1.5rem;
+  }
+
+  .steps-viewport {
+    height: min(68vh, 480px);
+  }
+
+  .heart-divider {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 480px) {
+  .option-btn,
+  .action-btn {
+    padding: 1.1rem 1.5rem;
+  }
+}

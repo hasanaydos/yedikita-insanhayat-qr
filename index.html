@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Son Gün — Yedikita İnsan Hayat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-layer">
+    <div class="bg-video-wrap">
+      <iframe
+        class="bg-video"
+        src="https://www.youtube.com/embed/V7uljd7S2Ds?autoplay=1&mute=1&controls=0&loop=1&playlist=V7uljd7S2Ds&playsinline=1&rel=0&modestbranding=1&showinfo=0&disablekb=1&fs=0&iv_load_policy=3&start=0"
+        title="Arka plan video"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        tabindex="-1"
+        aria-hidden="true">
+      </iframe>
+    </div>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <main class="app">
+    <header class="brand-header">
+      <img class="brand-logo" src="hicaz-logo-transparan.png" alt="Hicaz Derneği">
+      <p class="brand-stat">
+        Dünyada her gün açlıktan ölen kişi sayısı
+        <span class="brand-stat-number">25.000</span>
+      </p>
+    </header>
+
+    <div class="steps-viewport">
+      <div class="steps-track" id="stepsTrack">
+
+        <!-- Adım 1: Ana soru -->
+        <section class="step step-active" data-step="1">
+          <div class="step-content">
+            <h1 class="question">
+              <span class="q-line">Bugün dünyadaki</span>
+              <span class="q-line">son gününüz olsaydı,</span>
+              <span class="q-line q-accent">ne yapardınız?</span>
+            </h1>
+            <div class="options">
+              <button class="option-btn" data-next="2">Çalışmaya devam ederdim</button>
+              <button class="option-btn" data-next="2">Son bir iyilik yapmak isterdim</button>
+              <button class="option-btn" data-next="2">Bilmiyorum</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Adım 2: İyilik çağrısı -->
+        <section class="step" data-step="2">
+          <div class="step-content">
+            <button class="back-btn" data-back="1" aria-label="Geri dön">
+              <span class="back-arrow">←</span> Geri
+            </button>
+            <p class="statement">İhtiyaç sahibi insanlara yardım etmek istiyorum</p>
+            <button class="action-btn" data-next="3">İyiliğini yap</button>
+          </div>
+        </section>
+
+        <!-- Adım 3: Bağış tutarı -->
+        <section class="step" data-step="3">
+          <div class="step-content">
+            <button class="back-btn" data-back="2" aria-label="Geri dön">
+              <span class="back-arrow">←</span> Geri
+            </button>
+            <p class="step-label">Bağış tutarını seçin</p>
+            <div class="options amount-options">
+              <button class="option-btn amount-btn" data-amount="1000">1.000 TL</button>
+              <button class="option-btn amount-btn" data-amount="2000">2.000 TL</button>
+              <button class="option-btn amount-btn" data-amount="other">Diğer</button>
+            </div>
+            <div class="custom-amount hidden" id="customAmountWrap">
+              <input type="number" id="customAmount" class="amount-input" placeholder="Tutar girin (TL)" min="1" inputmode="numeric">
+            </div>
+            <button class="action-btn" id="amountContinue" data-next="4" disabled>Devam</button>
+          </div>
+        </section>
+
+        <!-- Adım 4: Ödeme yöntemi -->
+        <section class="step" data-step="4">
+          <div class="step-content">
+            <button class="back-btn" data-back="3" aria-label="Geri dön">
+              <span class="back-arrow">←</span> Geri
+            </button>
+            <p class="step-label">Ödeme yöntemi</p>
+            <div class="selected-amount" id="selectedAmountDisplay"></div>
+            <button class="option-btn payment-btn" id="cardPayment">
+              <span class="payment-icon">💳</span>
+              Kredi kartı ile öde
+            </button>
+            <button class="option-btn payment-btn secondary" data-next="5" id="transferBtn">Havale yap</button>
+          </div>
+        </section>
+
+        <!-- Adım 5: Havale bilgileri -->
+        <section class="step" data-step="5">
+          <div class="step-content transfer-content">
+            <button class="back-btn" data-back="4" aria-label="Geri dön">
+              <span class="back-arrow">←</span> Geri
+            </button>
+            <p class="step-label">Havale bilgileri</p>
+
+            <div class="info-row">
+              <div class="info-text">
+                <span class="info-label">IBAN</span>
+                <span class="info-value" id="ibanValue">TR00 0000 0000 0000 0000 0000 00</span>
+              </div>
+              <button class="copy-btn" data-copy="ibanValue" aria-label="IBAN kopyala">Kopyala</button>
+            </div>
+
+            <div class="info-row">
+              <div class="info-text">
+                <span class="info-label">Dernek adı</span>
+                <span class="info-value" id="assocName">Yedikita İnsan Hayat Derneği</span>
+              </div>
+              <button class="copy-btn" data-copy="assocName" aria-label="Dernek adı kopyala">Kopyala</button>
+            </div>
+
+            <div class="description-box">
+              <span class="info-label">Açıklama</span>
+              <p class="description-text">İsim soyisim ve TC no yazın</p>
+            </div>
+
+            <p class="toast hidden" id="copyToast">Panoya kopyalandı</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="heart-divider" aria-hidden="true">
+      <span class="divider-line"></span>
+      <span class="heart">♥</span>
+      <span class="divider-line"></span>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
