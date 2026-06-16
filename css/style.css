@@ -129,11 +129,13 @@ body {
   letter-spacing: 0.02em;
 }
 
-.brand-stat-number::after {
-  content: " kişi";
-  font-size: 0.78em;
-  font-weight: 500;
-  color: rgba(245, 245, 245, 0.85);
+.brand-stat-ref {
+  font-size: clamp(0.6rem, 2.2vw, 0.7rem);
+  font-weight: 400;
+  color: rgba(245, 245, 245, 0.5);
+  margin: 0.4rem auto 0;
+  max-width: 300px;
+  word-break: break-word;
 }
 
 .steps-viewport {

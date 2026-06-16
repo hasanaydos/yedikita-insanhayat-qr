@@ -177,4 +177,21 @@
       copyToast.classList.add('hidden');
     }, 2000);
   }
+
+  // Bugün açlıktan ölen kişi sayısı — Worldometers "dth1_hunger/today" sayacının
+  // birebir formülü: gün başından beri geçen saniye * 0.3546 (saniyedeki ölüm oranı).
+  const HUNGER_RATE_PER_SECOND = 0.3546;
+  const hungerCountEl = document.getElementById('hungerCount');
+
+  function updateHungerCount() {
+    if (!hungerCountEl) return;
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const secondsToday = (now - midnight) / 1000;
+    const count = Math.floor(secondsToday * HUNGER_RATE_PER_SECOND);
+    hungerCountEl.textContent = count.toLocaleString('tr-TR');
+  }
+
+  updateHungerCount();
+  setInterval(updateHungerCount, 5000);
 })();
