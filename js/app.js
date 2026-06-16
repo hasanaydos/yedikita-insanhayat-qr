@@ -80,9 +80,24 @@
     amountContinue.disabled = true;
   }
 
+  const appealImage = document.getElementById('appealImage');
+  const appealStatement = document.getElementById('appealStatement');
+  const appealCta = document.getElementById('appealCta');
+
+  function fillAppeal(btn) {
+    if (!btn.dataset.image) return;
+    appealImage.src = btn.dataset.image;
+    appealImage.alt = btn.textContent.trim();
+    appealStatement.textContent = btn.dataset.statement || '';
+    appealCta.textContent = btn.dataset.cta || 'Devam';
+  }
+
   document.querySelectorAll('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const next = parseInt(btn.dataset.next, 10);
+      if (btn.dataset.image) {
+        fillAppeal(btn);
+      }
       if (btn.id === 'amountContinue') {
         const isOther = customAmountWrap && !customAmountWrap.classList.contains('hidden');
         if (isOther) {

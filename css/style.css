@@ -157,6 +157,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
   opacity: 0;
   transform: translateY(100%);
   pointer-events: none;
@@ -306,6 +307,21 @@ body {
 .action-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* Çağrı görseli */
+.appeal-figure {
+  margin: 0 0 1.25rem;
+}
+
+.appeal-image {
+  display: block;
+  width: 100%;
+  max-height: clamp(180px, 34vh, 300px);
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* İfade metni */

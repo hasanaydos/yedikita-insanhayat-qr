@@ -48,21 +48,33 @@
               <span class="q-line q-accent">ne yapardınız?</span>
             </h1>
             <div class="options">
-              <button class="option-btn" data-next="2">Çalışmaya devam ederdim</button>
-              <button class="option-btn" data-next="2">Son bir iyilik yapmak isterdim</button>
-              <button class="option-btn" data-next="2">Bilmiyorum</button>
+              <button class="option-btn" data-next="2"
+                data-image="1.jpeg"
+                data-statement="Vaktiniz varken, sevdiklerine hasret kalanlara umut olun."
+                data-cta="Bir Aileye Umut Ol">Sevdiklerimle vakit geçirirdim</button>
+              <button class="option-btn" data-next="2"
+                data-image="2.jpeg"
+                data-statement="Tek hayali yaşamak olanlara bugün destek olun."
+                data-cta="Bir Hayale Destek Ol">Yarım kalan hayallerimi tamamlardım</button>
+              <button class="option-btn" data-next="2"
+                data-image="3.jpeg"
+                data-statement="Vaktiniz varken, geriye kalıcı bir iz bırakın."
+                data-cta="Kalıcı Bir İz Bırak">Benden sonra yaşayacak bir iyilik bırakırdım</button>
             </div>
           </div>
         </section>
 
-        <!-- Adım 2: İyilik çağrısı -->
+        <!-- Adım 2: İyilik çağrısı (içerik seçime göre dolar) -->
         <section class="step" data-step="2">
           <div class="step-content">
             <button class="back-btn" data-back="1" aria-label="Geri dön">
               <span class="back-arrow">←</span> Geri
             </button>
-            <p class="statement">İhtiyaç sahibi insanlara yardım etmek istiyorum</p>
-            <button class="action-btn" data-next="3">İyiliğini yap</button>
+            <figure class="appeal-figure">
+              <img class="appeal-image" id="appealImage" src="" alt="">
+            </figure>
+            <p class="statement" id="appealStatement"></p>
+            <button class="action-btn" data-next="3" id="appealCta"></button>
           </div>
         </section>
 
