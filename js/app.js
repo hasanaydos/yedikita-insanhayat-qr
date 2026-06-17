@@ -202,4 +202,47 @@
 
   updateHungerCount();
   setInterval(updateHungerCount, 5000);
+
+  // Arka plan videosu — sekme/ekran değişiminde duraklayınca geri dönüldüğünde
+  // otomatik devam etsin diye YouTube IFrame API ile kontrol edilir.
+  let bgPlayer = null;
+
+  function ensureBgPlaying() {
+    if (bgPlayer && typeof bgPlayer.playVideo === 'function') {
+      try {
+        bgPlayer.mute();
+        bgPlayer.playVideo();
+      } catch (e) {}
+    }
+  }
+
+  window.onYouTubeIframeAPIReady = function () {
+    if (typeof YT === 'undefined' || !document.getElementById('bgVideo')) return;
+    bgPlayer = new YT.Player('bgVideo', {
+      events: {
+        onReady: function () {
+          ensureBgPlaying();
+        },
+        onStateChange: function (event) {
+          // Beklenmedik şekilde duraklarsa (örn. arka plana alınınca) devam ettir.
+          if (event.data === YT.PlayerState.PAUSED) {
+            ensureBgPlaying();
+          }
+        }
+      }
+    });
+  };
+
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) ensureBgPlaying();
+  });
+  window.addEventListener('pageshow', ensureBgPlaying);
+  window.addEventListener('focus', ensureBgPlaying);
+
+  (function loadYouTubeApi() {
+    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  })();
 })();
