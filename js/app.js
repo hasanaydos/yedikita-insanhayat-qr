@@ -80,9 +80,14 @@
     amountContinue.disabled = true;
   }
 
+  const appealStatement = document.getElementById('appealStatement');
+
   document.querySelectorAll('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const next = parseInt(btn.dataset.next, 10);
+      if (btn.dataset.statement && appealStatement) {
+        appealStatement.textContent = btn.dataset.statement;
+      }
       if (btn.id === 'amountContinue') {
         const isOther = customAmountWrap && !customAmountWrap.classList.contains('hidden');
         if (isOther) {
