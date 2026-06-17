@@ -120,7 +120,10 @@
         customAmountInput.value = '';
         state.selectedAmount = null;
         disableContinue();
-        customAmountInput.focus();
+        customAmountInput.focus({ preventScroll: true });
+        setTimeout(() => {
+          customAmountInput.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }, 300);
       } else {
         customAmountWrap.classList.add('hidden');
         state.selectedAmount = parseInt(btn.dataset.amount, 10);
