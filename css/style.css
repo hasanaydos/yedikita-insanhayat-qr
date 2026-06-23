@@ -303,6 +303,12 @@ body {
   letter-spacing: 0.08em;
 }
 
+a.action-btn {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+}
+
 .action-btn:hover:not(:disabled) {
   background: var(--gold-dark);
   border-color: var(--gold-dark);
